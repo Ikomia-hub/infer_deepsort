@@ -1,0 +1,2 @@
+# torchreid
+git+https://github.com/KaiyangZhou/deep-person-reid.git@6987d99074fcc63146660b83b38218c37b4412b3

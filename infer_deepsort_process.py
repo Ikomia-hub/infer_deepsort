@@ -31,10 +31,10 @@ class TrackerDeepSort:
     def __init__(self):
         # initialize deepsort
         self.cfg = get_config()
-        dirname = os.path.dirname(__file__)
-        filename = os.path.join(dirname, 'deep_sort_pytorch/configs/deep_sort.yaml')
+        filename = os.path.join(os.path.dirname(__file__), 'deep_sort_pytorch/configs/deep_sort.yaml')
         self.cfg.merge_from_file(filename)
-        self.deepsort = DeepSort(os.path.join(dirname, self.cfg.DEEPSORT.REID_CKPT),
+
+        self.deepsort = DeepSort(reid_model_name=self.cfg.DEEPSORT.REID_MODEL,
                                  max_dist=self.cfg.DEEPSORT.MAX_DIST,
                                  min_confidence=self.cfg.DEEPSORT.MIN_CONFIDENCE,
                                  nms_max_overlap=self.cfg.DEEPSORT.NMS_MAX_OVERLAP,
