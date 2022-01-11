@@ -207,7 +207,7 @@ class DeepSortProcess(dataprocess.C2dImageTask):
                 prop_text.font_size = 8
                 prop_text.color = color
                 prop_text.bold = True
-                graphics_out.addText(str(track_id), x, y, prop_text)
+                graphics_out.addText(str(track_id) + "-" + labels[i], x, y, prop_text)
 
                 # object results
                 results = []
