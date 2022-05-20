@@ -42,7 +42,6 @@ class Tracker:
         self.max_iou_distance = max_iou_distance
         self.max_age = max_age
         self.n_init = n_init
-
         self.kf = kalman_filter.KalmanFilter()
         self.tracks = []
         self._next_id = 1
@@ -75,12 +74,14 @@ class Tracker:
 
         # Update track set.
         for track_idx, detection_idx in matches:
-            self.tracks[track_idx].update(
-                self.kf, detections[detection_idx])
+            self.tracks[track_idx].update(self.kf, detections[detection_idx])
+
         for track_idx in unmatched_tracks:
             self.tracks[track_idx].mark_missed()
+
         for detection_idx in unmatched_detections:
             self._initiate_track(detections[detection_idx])
+
         self.tracks = [t for t in self.tracks if not t.is_deleted()]
 
         # Update distance metric.
@@ -92,8 +93,8 @@ class Tracker:
             features += track.features
             targets += [track.track_id for _ in track.features]
             track.features = []
-        self.metric.partial_fit(
-            np.asarray(features), np.asarray(targets), active_targets)
+
+        self.metric.partial_fit(np.asarray(features), np.asarray(targets), active_targets)
 
     def _match(self, detections):
 
@@ -108,10 +109,8 @@ class Tracker:
             return cost_matrix
 
         # Split track set into confirmed and unconfirmed tracks.
-        confirmed_tracks = [
-            i for i, t in enumerate(self.tracks) if t.is_confirmed()]
-        unconfirmed_tracks = [
-            i for i, t in enumerate(self.tracks) if not t.is_confirmed()]
+        confirmed_tracks = [i for i, t in enumerate(self.tracks) if t.is_confirmed()]
+        unconfirmed_tracks = [i for i, t in enumerate(self.tracks) if not t.is_confirmed()]
 
         # Associate confirmed tracks using appearance features.
         matches_a, unmatched_tracks_a, unmatched_detections = \
@@ -123,9 +122,11 @@ class Tracker:
         iou_track_candidates = unconfirmed_tracks + [
             k for k in unmatched_tracks_a if
             self.tracks[k].time_since_update == 1]
+
         unmatched_tracks_a = [
             k for k in unmatched_tracks_a if
             self.tracks[k].time_since_update != 1]
+
         matches_b, unmatched_tracks_b, unmatched_detections = \
             linear_assignment.min_cost_matching(
                 iou_matching.iou_cost, self.max_iou_distance, self.tracks,

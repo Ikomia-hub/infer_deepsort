@@ -52,7 +52,7 @@ class TrackerDeepSort:
         color = [int((p * (label ** 2 - label + 1)) % 255) for p in palette]
         return color
 
-    def track_deepsort(self, obj_graphics, obj_data, img, param):
+    def track_deepsort(self, obj_data, img, param):
         xywh_boxes = []
         confidences = []
         labels = []
@@ -136,7 +136,7 @@ class DeepSortProcess(dataprocess.C2dImageTask):
 
         self.tracker = TrackerDeepSort()
 
-    def getProgressSteps(self, eltCount=1):
+    def getProgressSteps(self):
         # Function returning the number of progress steps for this process
         # This is handled by the main progress bar of Ikomia application
         return 2
@@ -159,9 +159,8 @@ class DeepSortProcess(dataprocess.C2dImageTask):
         src_image = img_in.getImage()
 
         # Call to the process main routine
-        obj_graphics = graphics_in.getItems()
         obj_data = measures_in.getMeasures()
-        outputs, confidences, labels = self.tracker.track_deepsort(obj_graphics, obj_data, src_image, param)
+        outputs, confidences, labels = self.tracker.track_deepsort(obj_data, src_image, param)
 
         # Step progress bar:
         self.emitStepProgress()
@@ -246,24 +245,35 @@ class DeepSortProcessFactory(dataprocess.CTaskFactory):
         dataprocess.CTaskFactory.__init__(self)
         # Set process information as string here
         self.info.name = "infer_deepsort"
-        self.info.shortDescription = "your short description"
-        self.info.description = "your description"
-        self.info.authors = "Plugin authors"
+        self.info.shortDescription = "Multiple Object Tracking algorithm (MOT) combining a deep association metric" \
+                                     "with the well known SORT algorithm for better performance."
+        self.info.description = "Simple Online and Realtime Tracking (SORT) is a pragmatic approach to multiple " \
+                                "object tracking with a focus on simple, effective algorithms. In this paper, we " \
+                                "integrate appearance information to improve the performance of SORT. Due to this " \
+                                "extension we are able to track objects through longer periods of occlusions, " \
+                                "effectively reducing the number of identity switches. In spirit of the original " \
+                                "framework we place much of the computational complexity into an offline " \
+                                "pre-training stage where we learn a deep association metric on a large-scale person " \
+                                "re-identification dataset. During online application, we establish " \
+                                "measurement-to-track associations using nearest neighbor queries in visual " \
+                                "appearance space. Experimental evaluation shows that our extensions reduce the " \
+                                "number of identity switches by 45%, achieving overall competitive performance " \
+                                "at high frame rates."
+        self.info.authors = "Nicolai Wojke†, Alex Bewley, Dietrich Paulus†"
         # relative path -> as displayed in Ikomia application process tree
-        self.info.path = "Plugins/Python"
+        self.info.path = "Plugins/Python/Tracking"
         self.info.version = "1.0.0"
-        # self.info.iconPath = "your path to a specific icon"
-        self.info.authors = "algorithm author"
-        self.info.article = "title of associated research article"
-        self.info.journal = "publication journal"
-        self.info.year = 2021
-        self.info.license = "MIT License"
+        self.info.iconPath = "icons/logo.png"
+        self.info.article = "Simple Online and Realtime Tracking with a deep association metric"
+        self.info.journal = ""
+        self.info.year = 2017
+        self.info.license = "GPL-3.0"
         # URL of documentation
-        self.info.documentationLink = ""
+        self.info.documentationLink = "https://arxiv.org/pdf/1703.07402.pdf"
         # Code source repository
-        self.info.repository = ""
+        self.info.repository = "https://github.com/nwojke/deep_sort"
         # Keywords used for search
-        self.info.keywords = "your,keywords,here"
+        self.info.keywords = "multiple,object,tracking,cnn,SORT,Kalman"
 
     def create(self, param=None):
         # Create process object
