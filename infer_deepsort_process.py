@@ -149,7 +149,6 @@ class DeepSortProcess(dataprocess.C2dImageTask):
         # Examples :
         # Get input :
         img_in = self.getInput(0)
-        graphics_in = self.getInput(1)
         measures_in = self.getInput(2)
 
         # Get parameters :
