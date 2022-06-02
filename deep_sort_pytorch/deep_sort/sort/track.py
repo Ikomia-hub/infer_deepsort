@@ -143,10 +143,8 @@ class Track:
         self.features.append(detection.feature)
         self.hits += 1
         self.time_since_update = 0
-
-        if detection.confidence > self.confidence:
-            self.confidence = detection.confidence
-            self.label = detection.label
+        self.confidence = detection.confidence
+        self.label = detection.label
 
         if self.state == TrackState.Tentative and self.hits >= self._n_init:
             self.state = TrackState.Confirmed
