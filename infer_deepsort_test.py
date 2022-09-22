@@ -14,7 +14,7 @@ def test(t, data_dict):
     input_img.setImage(img)
 
     # measure input
-    measure_in = t.getInput(2)
+    measure_in = t.getInput(1)
     measure_in.addObject(0, 'a', 1., 0, 0, 10, 10, [0, 0, 255])
     measure_in.addObject(1, 'b', 1., 10, 10, 20, 20, [255, 0, 255])
 
