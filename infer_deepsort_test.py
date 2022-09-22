@@ -1,6 +1,5 @@
 import logging
-from ikomia import dataprocess
-from ikomia.core import task, ParamMap, MeasureId
+from ikomia.core import task
 from ikomia.utils.tests import run_for_test
 import cv2
 
@@ -16,20 +15,14 @@ def test(t, data_dict):
 
     # measure input
     measure_in = t.getInput(2)
-    data = []
-    confidence_data = dataprocess.CObjectMeasure(
-        dataprocess.CMeasure(MeasureId.CUSTOM, "Confidence"), 0.8, 0, "car")
-    box_data = dataprocess.CObjectMeasure(
-        dataprocess.CMeasure(MeasureId.BBOX), [50, 50, 100, 100], 0, "car")
-    data.append(confidence_data)
-    data.append(box_data)
-    measure_in.addObjectMeasures(data)
+    measure_in.addObject(0, 'a', 1., 0, 0, 10, 10, [0, 0, 255])
+    measure_in.addObject(1, 'b', 1., 10, 10, 20, 20, [255, 0, 255])
 
     params = task.get_parameters(t)
     # run once on set frame 1
     run_for_test(t)
 
-    for label in ["all", "car"]:
+    for label in ["all", "a", "b"]:
         params["categories"] = label
         task.set_parameters(t, params)
         yield run_for_test(t)
