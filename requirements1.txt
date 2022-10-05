@@ -6,3 +6,4 @@ torchvision == 0.10.0
 easydict
 gdown
 tensorboard==2.5.0
+opencv-python
