@@ -60,7 +60,7 @@ class TrackerDeepSort:
         self.deepsort.min_confidence = param.confidence
 
         # Adapt detections to deep sort input format
-        for obj in obj_detect_in.getObjects():
+        for obj in obj_detect_in.get_objects():
             if param.categories == "all" or obj.label in labels_to_track:
                 # box to deep sort format
                 xywh_boxes.append([obj.box[0]+obj.box[2]/2, obj.box[1]+obj.box[3]/2, obj.box[2], obj.box[3]])
@@ -93,18 +93,17 @@ class DeepSortParam(core.CWorkflowTaskParam):
         self.categories = "all"
         self.confidence = 0.5
 
-    def setParamMap(self, param_map):
+    def set_values(self, param_map):
         # Set parameters values from Ikomia application
         # Parameters values are stored as string and accessible like a python dict
         self.categories = param_map["categories"]
         self.confidence = float(param_map["confidence"])
 
-    def getParamMap(self):
+    def get_values(self):
         # Send parameters values to Ikomia application
         # Create the specific dict structure (string container)
-        param_map = core.ParamMap()
-        param_map["categories"] = self.categories
-        param_map["confidence"] = str(self.confidence)
+        param_map = {"categories": self.categories,
+                     "confidence": str(self.confidence)}
         return param_map
 
 
@@ -116,21 +115,21 @@ class DeepSortProcess(dataprocess.C2dImageTask):
 
     def __init__(self, name, param):
         dataprocess.C2dImageTask.__init__(self, name)
-        self.removeInput(1)
+        self.remove_input(1)
         # Add object detection input
-        self.addInput(dataprocess.CObjectDetectionIO())
+        self.add_input(dataprocess.CObjectDetectionIO())
         # Add object detection output
-        self.addOutput(dataprocess.CObjectDetectionIO())
+        self.add_output(dataprocess.CObjectDetectionIO())
 
         # Create parameters class
         if param is None:
-            self.setParam(DeepSortParam())
+            self.set_param_object(DeepSortParam())
         else:
-            self.setParam(copy.deepcopy(param))
+            self.set_param_object(copy.deepcopy(param))
 
         self.tracker = TrackerDeepSort()
 
-    def getProgressSteps(self):
+    def get_progress_steps(self):
         # Function returning the number of progress steps for this process
         # This is handled by the main progress bar of Ikomia application
         return 2
@@ -138,31 +137,31 @@ class DeepSortProcess(dataprocess.C2dImageTask):
     def run(self):
         # Core function of your process
         # Call beginTaskRun for initialization
-        self.beginTaskRun()
+        self.begin_task_run()
 
         # Examples :
         # Get input :
-        img_in = self.getInput(0)
-        obj_detect_in = self.getInput(1)
+        img_in = self.get_input(0)
+        obj_detect_in = self.get_input(1)
 
         # Get parameters :
-        param = self.getParam()
+        param = self.get_param_object()
 
         # Get image from input/output (numpy array):
-        src_image = img_in.getImage()
+        src_image = img_in.get_image()
 
         # Call to the process main routine
         outputs, confidences, labels = self.tracker.track_deepsort(obj_detect_in, src_image, param)
 
         # Step progress bar:
-        self.emitStepProgress()
+        self.emit_step_progress()
 
         # Set image of input/output (numpy array):
-        img_out = self.getOutput(0)
-        img_out.setImage(src_image)
+        img_out = self.get_output(0)
+        img_out.set_image(src_image)
 
         # Object detection output
-        obj_detect_out = self.getOutput(1)
+        obj_detect_out = self.get_output(1)
         obj_detect_out.init("DeepSort", 0)
 
         if len(outputs) > 0:
@@ -177,13 +176,13 @@ class DeepSortProcess(dataprocess.C2dImageTask):
                 h = float(xyxy[3] - xyxy[1])
                 track_id = identities[i]
                 color = self.tracker.compute_color_for_labels(track_id)
-                obj_detect_out.addObject(int(track_id), labels[i], confidences[i], x, y, w, h, color)
+                obj_detect_out.add_object(int(track_id), labels[i], confidences[i], x, y, w, h, color)
 
         # Step progress bar:
-        self.emitStepProgress()
+        self.emit_step_progress()
 
         # Call endTaskRun to finalize process
-        self.endTaskRun()
+        self.end_task_run()
 
 
 # --------------------
@@ -196,7 +195,7 @@ class DeepSortProcessFactory(dataprocess.CTaskFactory):
         dataprocess.CTaskFactory.__init__(self)
         # Set process information as string here
         self.info.name = "infer_deepsort"
-        self.info.shortDescription = "Multiple Object Tracking algorithm (MOT) combining a deep association metric" \
+        self.info.short_description = "Multiple Object Tracking algorithm (MOT) combining a deep association metric" \
                                      "with the well known SORT algorithm for better performance."
         self.info.description = "Simple Online and Realtime Tracking (SORT) is a pragmatic approach to multiple " \
                                 "object tracking with a focus on simple, effective algorithms. In this paper, we " \
@@ -214,13 +213,13 @@ class DeepSortProcessFactory(dataprocess.CTaskFactory):
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Tracking"
         self.info.version = "1.0.0"
-        self.info.iconPath = "icons/logo.png"
+        self.info.icon_path = "icons/logo.png"
         self.info.article = "Simple Online and Realtime Tracking with a deep association metric"
         self.info.journal = ""
         self.info.year = 2017
         self.info.license = "GPL-3.0"
         # URL of documentation
-        self.info.documentationLink = "https://arxiv.org/pdf/1703.07402.pdf"
+        self.info.documentation_link = "https://arxiv.org/pdf/1703.07402.pdf"
         # Code source repository
         self.info.repository = "https://github.com/nwojke/deep_sort"
         # Keywords used for search
