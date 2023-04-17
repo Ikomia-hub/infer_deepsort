@@ -57,7 +57,7 @@ class TrackerDeepSort:
         confidences = []
         labels = []
         labels_to_track = param.categories.split(',')
-        self.deepsort.min_confidence = param.confidence
+        self.deepsort.min_confidence = param.conf_thres
 
         # Adapt detections to deep sort input format
         for obj in obj_detect_in.get_objects():
@@ -91,19 +91,19 @@ class DeepSortParam(core.CWorkflowTaskParam):
         core.CWorkflowTaskParam.__init__(self)
         # Place default value initialization here
         self.categories = "all"
-        self.confidence = 0.5
+        self.conf_thres = 0.5
 
     def set_values(self, param_map):
         # Set parameters values from Ikomia application
         # Parameters values are stored as string and accessible like a python dict
         self.categories = param_map["categories"]
-        self.confidence = float(param_map["confidence"])
+        self.conf_thres = float(param_map["conf_thres"])
 
     def get_values(self):
         # Send parameters values to Ikomia application
         # Create the specific dict structure (string container)
         param_map = {"categories": self.categories,
-                     "confidence": str(self.confidence)}
+                     "conf_thres": str(self.conf_thres)}
         return param_map
 
 

@@ -41,7 +41,7 @@ class DeepSortWidget(core.CWorkflowTaskWidget):
         self.grid_layout = QGridLayout()
 
         self.spin_conf = pyqtutils.append_double_spin(self.grid_layout, "Confidence min",
-                                                      self.parameters.confidence, 0.0, 1.0, 0.1, 2)
+                                                      self.parameters.conf_thres, 0.0, 1.0, 0.1, 2)
 
         self.edit_categories = pyqtutils.append_edit(self.grid_layout, "Categories", self.parameters.categories)
 
@@ -53,7 +53,7 @@ class DeepSortWidget(core.CWorkflowTaskWidget):
     def on_apply(self):
         # Apply button clicked slot
         # Get parameters from widget
-        self.parameters.confidence = self.spin_conf.value()
+        self.parameters.conf_thres = self.spin_conf.value()
         self.parameters.categories = self.edit_categories.text()
 
         # Send signal to launch the process
