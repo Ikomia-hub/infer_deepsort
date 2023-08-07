@@ -1,5 +1,4 @@
 import logging
-from ikomia.core import task
 from ikomia.utils.tests import run_for_test
 import cv2
 
@@ -18,11 +17,11 @@ def test(t, data_dict):
     measure_in.addObject(0, 'a', 1., 0, 0, 10, 10, [0, 0, 255])
     measure_in.addObject(1, 'b', 1., 10, 10, 20, 20, [255, 0, 255])
 
-    params = task.get_parameters(t)
+    params = t.get_parameters()
     # run once on set frame 1
     run_for_test(t)
 
     for label in ["all", "a", "b"]:
         params["categories"] = label
-        task.set_parameters(t, params)
+        t.set_parameters(params)
         yield run_for_test(t)
