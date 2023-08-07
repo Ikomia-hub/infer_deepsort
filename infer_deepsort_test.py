@@ -14,8 +14,8 @@ def test(t, data_dict):
 
     # measure input
     measure_in = t.getInput(1)
-    measure_in.addObject(0, 'a', 1., 0, 0, 10, 10, [0, 0, 255])
-    measure_in.addObject(1, 'b', 1., 10, 10, 20, 20, [255, 0, 255])
+    measure_in.add_object(0, 'a', 1., 0, 0, 10, 10, [0, 0, 255])
+    measure_in.add_object(1, 'b', 1., 10, 10, 20, 20, [255, 0, 255])
 
     params = t.get_parameters()
     # run once on set frame 1
