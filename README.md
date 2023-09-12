@@ -140,7 +140,7 @@ while True:
         output.to_json()
 ```
 
-DeepSORT algorithm generates 2 outpus:
+DeepSORT algorithm generates 2 outputs:
 
 1. Forwaded original image (CImageIO)
 2. Object detection output (CObjectDetectionIO)
