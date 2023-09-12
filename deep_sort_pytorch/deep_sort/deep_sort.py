@@ -50,7 +50,7 @@ class DeepSort(object):
 
             box = track.to_tlwh()
             x1, y1, x2, y2 = self._tlwh_to_xyxy(box)
-            outputs.append(np.array([x1, y1, x2, y2, track.track_id], dtype=np.int))
+            outputs.append(np.array([x1, y1, x2, y2, track.track_id], dtype=np.int64))
             confidences.append(track.confidence)
             labels.append(track.label)
 
