@@ -19,10 +19,11 @@
     </a> 
 </p>
 
-Simple Online and Realtime Tracking (SORT) is a pragmatic approach to multiple object tracking with a focus on simple, effective algorithms. In this paper, we integrate appearance information to improve the performance of SORT. Due to this extension we are able to track objects through longer periods of occlusions, effectively reducing the number of identity switches. In spirit of the original framework we place much of the computational complexity into an offline pre-training stage where we learn a deep association metric on a large-scale person re-identification dataset. During online application, we establish measurement-to-track associations using nearest neighbor queries in visual appearance space. Experimental evaluation shows that our extensions reduce the number of identity switches by 45%, achieving overall competitive performance at high frame rates.
+Run DeepSort tracking algorithm for video analysis. In most cases, tracking algorithms should be connected to object detection algorithm.
 
-[Insert illustrative image here. Image must be accessible publicly, in algorithm Github repository for example.
-<img src="images/illustration.png"  alt="Illustrative image" width="30%" height="30%">]
+Simple Online and Realtime Tracking (SORT) is a pragmatic approach to multiple object tracking with a focus on simple, effective algorithms. This algorithm improves performance of SORT by introducing deep association metric to reduce object identity switches.
+
+![Example image](https://raw.githubusercontent.com/Ikomia-hub/infer_deepsort/feat/new_readme/icons/example.jpg)
 
 ## :rocket: Use with Ikomia API
 
@@ -36,20 +37,50 @@ pip install ikomia
 
 #### 2. Create your workflow
 
-[Change the sample image URL to fit algorithm purpose]
-
 ```python
-import ikomia
 from ikomia.dataprocess.workflow import Workflow
+from ikomia.utils.displayIO import display
+import cv2
 
 # Init your workflow
 wf = Workflow()
 
-# Add algorithm
-algo = wf.add_task(name="infer_deepsort", auto_connect=True)
+# Add object detection algorithm
+detector = wf.add_task(name="infer_yolo_v7", auto_connect=True)
 
-# Run on your image  
-wf.run_on(url="example_image.png")
+# Add DeepSORT tracking algorithm
+tracking = wf.add_task(name="infer_deepsort", auto_connect=True)
+
+stream = cv2.VideoCapture(0)
+while True:
+    # Read image from stream
+    ret, frame = stream.read()
+
+    # Test if streaming is OK
+    if not ret:
+        continue
+
+    # Run the workflow on current frame
+    wf.run_on(array=frame)
+
+    # Get results
+    image_out = tracking.get_output(0)
+    obj_detect_out = tracking.get_output(1)
+    graphics_out = obj_detect_out.get_graphics_io()
+
+    # Display
+    img_res = cv2.cvtColor(image_out.get_image_with_graphics(graphics_out), cv2.COLOR_BGR2RGB)
+    display(img_res, title="DeepSORT", viewer="opencv")
+
+    # Press 'q' to quit the streaming process
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# After the loop release the stream object
+stream.release()
+# Destroy all windows
+cv2.destroyAllWindows()
+
 ```
 
 ## :sunny: Use with Ikomia Studio
@@ -67,51 +98,49 @@ Ikomia Studio offers a friendly UI with the same features as the API.
 [Change the sample image URL to fit algorithm purpose]
 
 ```python
-import ikomia
-from ikomia.dataprocess.workflow import Workflow
+# Add DeepSORT tracking algorithm
+tracking = wf.add_task(name="infer_deepsort", auto_connect=True)
 
-# Init your workflow
-wf = Workflow()
-
-# Add algorithm
-algo = wf.add_task(name="infer_deepsort", auto_connect=True)
-
-algo.set_parameters({
-    "param1": "value1",
-    "param2": "value2",
-    ...
+tracking.set_parameters({
+    "categories": "all",
+    "conf_thres": "0.5",
 })
-
-# Run on your image  
-wf.run_on(url="example_image.png")
-
 ```
+
+- **categories** (str, default="all"): categories of objects you want to track. Use a comma separated string to set multiple categories (ex: "dog,person,car").
+- **conf_thresh** (float, default=0.5): object detection confidence.
+
+***Note***: parameter key and value should be in **string format** when added to the dictionary.
 
 ## :mag: Explore algorithm outputs
 
 Every algorithm produces specific outputs, yet they can be explored them the same way using the Ikomia API. For a more in-depth understanding of managing algorithm outputs, please refer to the [documentation](https://ikomia-dev.github.io/python-api-documentation/advanced_guide/IO_management.html).
 
 ```python
-import ikomia
-from ikomia.dataprocess.workflow import Workflow
+# Add DeepSORT tracking algorithm
+tracking = wf.add_task(name="infer_deepsort", auto_connect=True)
 
-# Init your workflow
-wf = Workflow()
+stream = cv2.VideoCapture(0)
+while True:
+    # Read image from stream
+    ret, frame = stream.read()
 
-# Add algorithm
-algo = wf.add_task(name="infer_deepsort", auto_connect=True)
+    # Test if streaming is OK
+    if not ret:
+        continue
 
-# Run on your image  
-wf.run_on(url="example_image.png")
+    # Run the workflow on current frame
+    wf.run_on(array=frame)
 
-# Iterate over outputs
-for output in algo.get_outputs()
-    # Print information
-    print(output)
-    # Export it to JSON
-    output.to_json()
+    # Iterate over outputs
+    for output in tracking.get_outputs()
+        # Print information
+        print(output)
+        # Export it to JSON
+        output.to_json()
 ```
 
-## :fast_forward: Advanced usage 
+DeepSORT algorithm generates 2 outpus:
 
-[optional]
+1. Forwaded original image (CImageIO)
+2. Object detection output (CObjectDetectionIO)
