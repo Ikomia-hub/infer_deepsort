@@ -66,10 +66,9 @@ while True:
     # Get results
     image_out = tracking.get_output(0)
     obj_detect_out = tracking.get_output(1)
-    graphics_out = obj_detect_out.get_graphics_io()
 
     # Display
-    img_res = cv2.cvtColor(image_out.get_image_with_graphics(graphics_out), cv2.COLOR_BGR2RGB)
+    img_res = cv2.cvtColor(image_out.get_image_with_graphics(obj_detect_out), cv2.COLOR_BGR2RGB)
     display(img_res, title="DeepSORT", viewer="opencv")
 
     # Press 'q' to quit the streaming process
