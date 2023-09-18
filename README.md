@@ -92,10 +92,6 @@ Ikomia Studio offers a friendly UI with the same features as the API.
 
 ## :pencil: Set algorithm parameters
 
-[Explain each algorithm parameters]
-
-[Change the sample image URL to fit algorithm purpose]
-
 ```python
 # Add DeepSORT tracking algorithm
 tracking = wf.add_task(name="infer_deepsort", auto_connect=True)
