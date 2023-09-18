@@ -128,7 +128,7 @@ while True:
     wf.run_on(array=frame)
 
     # Iterate over outputs
-    for output in tracking.get_outputs()
+    for output in tracking.get_outputs():
         # Print information
         print(output)
         # Export it to JSON
