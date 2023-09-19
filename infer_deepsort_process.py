@@ -197,18 +197,6 @@ class DeepSortProcessFactory(dataprocess.CTaskFactory):
         self.info.name = "infer_deepsort"
         self.info.short_description = "Multiple Object Tracking algorithm (MOT) combining a deep association metric" \
                                      "with the well known SORT algorithm for better performance."
-        self.info.description = "Simple Online and Realtime Tracking (SORT) is a pragmatic approach to multiple " \
-                                "object tracking with a focus on simple, effective algorithms. In this paper, we " \
-                                "integrate appearance information to improve the performance of SORT. Due to this " \
-                                "extension we are able to track objects through longer periods of occlusions, " \
-                                "effectively reducing the number of identity switches. In spirit of the original " \
-                                "framework we place much of the computational complexity into an offline " \
-                                "pre-training stage where we learn a deep association metric on a large-scale person " \
-                                "re-identification dataset. During online application, we establish " \
-                                "measurement-to-track associations using nearest neighbor queries in visual " \
-                                "appearance space. Experimental evaluation shows that our extensions reduce the " \
-                                "number of identity switches by 45%, achieving overall competitive performance " \
-                                "at high frame rates."
         self.info.authors = "Nicolai Wojke†, Alex Bewley, Dietrich Paulus†"
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Tracking"
