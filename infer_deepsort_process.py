@@ -128,13 +128,12 @@ class DeepSortProcess(dataprocess.C2dImageTask):
             self.set_param_object(copy.deepcopy(param))
 
         # Set cache dir in the algorithm folder to simplify deployment
-        old_torch_hub = torch.hub.get_dir()
-        torch.hub.set_dir(os.path.join(os.path.dirname(__file__), "models"))
+        os.environ["TORCH_HOME"] = (os.path.join(os.path.dirname(__file__), "models"))
 
         self.tracker = TrackerDeepSort()
 
         # Reset torch cache dir for next algorithms in the workflow
-        torch.hub.set_dir(old_torch_hub)
+        os.environ.pop("TORCH_HOME")
 
     def get_progress_steps(self):
         # Function returning the number of progress steps for this process
@@ -207,7 +206,7 @@ class DeepSortProcessFactory(dataprocess.CTaskFactory):
         self.info.authors = "Nicolai Wojke†, Alex Bewley, Dietrich Paulus†"
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Tracking"
-        self.info.version = "1.0.1"
+        self.info.version = "1.0.2"
         self.info.icon_path = "icons/logo.png"
         self.info.article = "Simple Online and Realtime Tracking with a deep association metric"
         self.info.journal = ""
