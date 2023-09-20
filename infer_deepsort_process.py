@@ -207,7 +207,7 @@ class DeepSortProcessFactory(dataprocess.CTaskFactory):
         self.info.authors = "Nicolai Wojke†, Alex Bewley, Dietrich Paulus†"
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Tracking"
-        self.info.version = "1.0.0"
+        self.info.version = "1.0.1"
         self.info.icon_path = "icons/logo.png"
         self.info.article = "Simple Online and Realtime Tracking with a deep association metric"
         self.info.journal = ""
