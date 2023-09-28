@@ -219,7 +219,8 @@ class DeepSortProcessFactory(dataprocess.CTaskFactory):
         # URL of documentation
         self.info.documentation_link = "https://arxiv.org/pdf/1703.07402.pdf"
         # Code source repository
-        self.info.repository = "https://github.com/nwojke/deep_sort"
+        self.info.repository = "https://github.com/Ikomia-hub/infer_deepsort"
+        self.info.original_repository = "https://github.com/nwojke/deep_sort"
         # Keywords used for search
         self.info.keywords = "multiple,object,tracking,cnn,SORT,Kalman"
 
