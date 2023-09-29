@@ -23,7 +23,7 @@ Run DeepSort tracking algorithm for video analysis. In most cases, tracking algo
 
 Simple Online and Realtime Tracking (SORT) is a pragmatic approach to multiple object tracking with a focus on simple, effective algorithms. This algorithm improves performance of SORT by introducing deep association metric to reduce object identity switches.
 
-![Example image](https://raw.githubusercontent.com/Ikomia-hub/infer_deepsort/feat/new_readme/icons/example.jpg)
+![Example image](https://raw.githubusercontent.com/Ikomia-hub/infer_deepsort/main/icons/example.jpg)
 
 ## :rocket: Use with Ikomia API
 
