@@ -223,6 +223,8 @@ class DeepSortProcessFactory(dataprocess.CTaskFactory):
         self.info.original_repository = "https://github.com/nwojke/deep_sort"
         # Keywords used for search
         self.info.keywords = "multiple,object,tracking,cnn,SORT,Kalman"
+        self.info.algo_type = core.AlgoType.INFER
+        self.info.algo_tasks = "OBJECT_TRACKING"
 
     def create(self, param=None):
         # Create process object
