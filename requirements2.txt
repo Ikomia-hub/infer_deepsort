@@ -1,2 +1,4 @@
 # torchreid
-git+https://github.com/KaiyangZhou/deep-person-reid.git@6987d99074fcc63146660b83b38218c37b4412b3
+# git+https://github.com/KaiyangZhou/deep-person-reid.git@6987d99074fcc63146660b83b38218c37b4412b3
+# Fork to use pyproject.toml (required for Python 3.12)
+git+https://github.com/Ikomia-dev/deep-person-reid.git
