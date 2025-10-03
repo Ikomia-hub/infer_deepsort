@@ -15,14 +15,16 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import copy
+import os
+
+import torch
 
 from ikomia import core, dataprocess
-import copy
-# Your imports below
+
 from infer_deepsort.deep_sort_pytorch.utils.parser import get_config
 from infer_deepsort.deep_sort_pytorch.deep_sort import DeepSort
-import torch
-import os
+
 
 palette = (2 ** 11 - 1, 2 ** 15 - 1, 2 ** 20 - 1)
 
@@ -102,8 +104,10 @@ class DeepSortParam(core.CWorkflowTaskParam):
     def get_values(self):
         # Send parameters values to Ikomia application
         # Create the specific dict structure (string container)
-        param_map = {"categories": self.categories,
-                     "conf_thres": str(self.conf_thres)}
+        param_map = {
+            "categories": self.categories,
+            "conf_thres": str(self.conf_thres)
+        }
         return param_map
 
 
@@ -126,6 +130,7 @@ class DeepSortProcess(dataprocess.C2dImageTask):
             self.set_param_object(DeepSortParam())
         else:
             self.set_param_object(copy.deepcopy(param))
+
         self.tracker = None
 
     def get_progress_steps(self):
@@ -142,13 +147,14 @@ class DeepSortProcess(dataprocess.C2dImageTask):
         # Reset torch cache dir for next algorithms in the workflow
         os.environ.pop("TORCH_HOME")
 
+    def init_long_process(self):
+        self.load_model()
+        super().init_long_process()
+
     def run(self):
         # Core function of your process
         # Call beginTaskRun for initialization
         self.begin_task_run()
-
-        if self.tracker is None:
-            self.load_model()
 
         # Get input :
         img_in = self.get_input(0)
@@ -210,7 +216,9 @@ class DeepSortProcessFactory(dataprocess.CTaskFactory):
         self.info.authors = "Nicolai Wojke†, Alex Bewley, Dietrich Paulus†"
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Tracking"
-        self.info.version = "1.0.5"
+        self.info.version = "1.1.0"
+        # Ikomia API compatibility
+        self.info.min_ikomia_version = "0.15.0"
         self.info.icon_path = "icons/logo.png"
         self.info.article = "Simple Online and Realtime Tracking with a deep association metric"
         self.info.journal = ""
@@ -225,6 +233,10 @@ class DeepSortProcessFactory(dataprocess.CTaskFactory):
         self.info.keywords = "multiple,object,tracking,cnn,SORT,Kalman"
         self.info.algo_type = core.AlgoType.INFER
         self.info.algo_tasks = "OBJECT_TRACKING"
+        self.info.hardware_config.min_cpu = 4
+        self.info.hardware_config.min_ram = 16
+        self.info.hardware_config.gpu_required = False
+        self.info.hardware_config.min_vram = 6
 
     def create(self, param=None):
         # Create process object
