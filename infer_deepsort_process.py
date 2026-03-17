@@ -1,20 +1,3 @@
-# Copyright (C) 2021 Ikomia SAS
-# Contact: https://www.ikomia.com
-#
-# This file is part of the IkomiaStudio software.
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import copy
 import os
 
@@ -216,9 +199,9 @@ class DeepSortProcessFactory(dataprocess.CTaskFactory):
         self.info.authors = "Nicolai Wojke†, Alex Bewley, Dietrich Paulus†"
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Tracking"
-        self.info.version = "1.1.1"
+        self.info.version = "1.2.0"
         # Ikomia API compatibility
-        self.info.min_ikomia_version = "0.15.0"
+        self.info.min_ikomia_version = "0.16.0"
         self.info.icon_path = "icons/logo.png"
         self.info.article = "Simple Online and Realtime Tracking with a deep association metric"
         self.info.journal = ""
