@@ -41,7 +41,7 @@ class TrackerDeepSort:
         xywh_boxes = []
         confidences = []
         labels = []
-        labels_to_track = param.categories.split(',')
+        labels_to_track = [part.strip() for part in param.categories.split(",")]
         self.deepsort.min_confidence = param.conf_thres
 
         # Adapt detections to deep sort input format
@@ -199,7 +199,7 @@ class DeepSortProcessFactory(dataprocess.CTaskFactory):
         self.info.authors = "Nicolai Wojke†, Alex Bewley, Dietrich Paulus†"
         # relative path -> as displayed in Ikomia application process tree
         self.info.path = "Plugins/Python/Tracking"
-        self.info.version = "1.2.0"
+        self.info.version = "1.2.1"
         # Ikomia API compatibility
         self.info.min_ikomia_version = "0.16.0"
         self.info.icon_path = "icons/logo.png"
